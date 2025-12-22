@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HealthSync | Patient Registration</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0f766e, #22c55e);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #ffffff;
+            width: 900px;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: #0f766e;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px 24px;
+        }
+
+        label {
+            font-size: 13px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 7px;
+            border: 1px solid #ccc;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .btn {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            background: #0f766e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>HealthSync</h1>
+    <div class="subtitle">Patient Registration Portal</div>
+
+    <form id="patientForm">
+
+        <div class="form-grid">
+
+            <div>
+                <label>Patient ID *</label>
+                <input type="number" id="patient_id" required>
+            </div>
+
+            <div>
+                <label>Full Name *</label>
+                <input type="text" id="full_name" required>
+            </div>
+
+            <div>
+                <label>Gender</label>
+                <select id="gender">
+                    <option value="">Select</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                    <option>Other</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Date of Birth *</label>
+                <input type="date" id="date_of_birth" required>
+            </div>
+
+            <div>
+                <label>Blood Group</label>
+                <select id="blood_group">
+                    <option value="">Select</option>
+                    <option>A+</option><option>A-</option>
+                    <option>B+</option><option>B-</option>
+                    <option>AB+</option><option>AB-</option>
+                    <option>O+</option><option>O-</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Phone Number</label>
+                <input type="tel" id="phone_number">
+            </div>
+
+            <div>
+                <label>Email</label>
+                <input type="email" id="email">
+            </div>
+
+            <div>
+                <label>Height (cm)</label>
+                <input type="number" id="height_cm">
+            </div>
+
+            <div>
+                <label>Weight (kg)</label>
+                <input type="number" id="weight_kg">
+            </div>
+
+            <div>
+                <label>City</label>
+                <input type="text" id="city">
+            </div>
+
+            <div>
+                <label>State</label>
+                <input type="text" id="state">
+            </div>
+
+            <div>
+                <label>Country</label>
+                <input type="text" id="country" value="India">
+            </div>
+
+            <div class="full-width">
+                <label>Address</label>
+                <textarea id="address" rows="3"></textarea>
+            </div>
+
+        </div>
+
+        <button class="btn" type="submit">Register Patient</button>
+    </form>
+</div>
+
+<script>
+document.getElementById("patientForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const payload = {
+        patient_id: Number(document.getElementById("patient_id").value),
+        full_name: document.getElementById("full_name").value.trim(),
+        gender: document.getElementById("gender").value,
+        date_of_birth: document.getElementById("date_of_birth").value,
+        blood_group: document.getElementById("blood_group").value,
+        phone_number: document.getElementById("phone_number").value,
+        email: document.getElementById("email").value,
+        height_cm: document.getElementById("height_cm").value
+            ? Number(document.getElementById("height_cm").value)
+            : null,
+        weight_kg: document.getElementById("weight_kg").value
+            ? Number(document.getElementById("weight_kg").value)
+            : null,
+        city: document.getElementById("city").value,
+        state: document.getElementById("state").value,
+        country: document.getElementById("country").value,
+        address: document.getElementById("address").value
+    };
+
+    try {
+        const response = await fetch("http://127.0.0.1:5000/patients/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+
+        const result = await response.json();
+        console.log(result);
+
+        if (response.ok) {
+            alert("Patient Registered Successfully!\nPatient ID: " + result.patient_id);
+            // Redirect to login.html
+            window.location.href = "login.html";
+        } else {
+            alert("Error: " + (result.error || "Unknown error"));
+        }
+
+    } catch (err) {
+        alert("❌ Cannot connect to server.\nIs Flask running?");
+        console.error(err);
+    }
+});
+</script>
+
+</body>
+</html>

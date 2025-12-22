@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HealthSync | Patient Vitals Entry</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * { box-sizing: border-box; font-family: "Segoe UI", Tahoma, sans-serif; }
+        body { margin: 0; background: linear-gradient(135deg, #0f766e, #22c55e); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        .container { background: #ffffff; width: 800px; padding: 30px 40px; border-radius: 12px; box-shadow: 0 15px 30px rgba(0,0,0,0.15); }
+        h1 { text-align: center; color: #0f766e; margin-bottom: 6px; }
+        .subtitle { text-align: center; font-size: 14px; color: #555; margin-bottom: 25px; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px 24px; }
+        label { font-size: 13px; color: #333; margin-bottom: 4px; display: block; }
+        input, textarea { width: 100%; padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 7px; }
+        input:focus, textarea:focus { outline: none; border-color: #0f766e; }
+        textarea { resize: none; }
+        .full-width { grid-column: span 2; }
+        .btn { margin-top: 25px; width: 100%; padding: 12px; font-size: 15px; background: #0f766e; color: white; border: none; border-radius: 8px; cursor: pointer; }
+        .btn:hover { background: #115e59; }
+        .footer { margin-top: 18px; text-align: center; font-size: 12px; color: #777; }
+        .unit { font-size: 12px; color: #666; }
+        .message { text-align: center; margin-top: 15px; font-weight: bold; }
+        .message.success { color: green; }
+        .message.error { color: red; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>HealthSync</h1>
+    <div class="subtitle">Doctor / Nurse – Patient Vitals Entry</div>
+
+    <form id="vitalsForm">
+
+        <div class="form-grid">
+            <div>
+                <label>Patient ID *</label>
+                <input type="number" name="patient_id" required>
+            </div>
+            <div>
+                <label>Heart Rate (bpm)</label>
+                <input type="number" name="heart_rate_bpm" min="30" max="220">
+            </div>
+            <div>
+                <label>Systolic BP <span class="unit">(mmHg)</span></label>
+                <input type="number" name="systolic_bp_mmHg" min="70" max="250">
+            </div>
+            <div>
+                <label>Diastolic BP <span class="unit">(mmHg)</span></label>
+                <input type="number" name="diastolic_bp_mmHg" min="40" max="150">
+            </div>
+            <div>
+                <label>Body Temperature <span class="unit">(°C)</span></label>
+                <input type="number" step="0.01" name="body_temperature_c" min="30" max="45">
+            </div>
+            <div>
+                <label>Respiratory Rate <span class="unit">(breaths/min)</span></label>
+                <input type="number" name="respiratory_rate" min="8" max="60">
+            </div>
+            <div>
+                <label>Oxygen Saturation <span class="unit">(SpO₂ %)</span></label>
+                <input type="number" name="oxygen_saturation" min="50" max="100">
+            </div>
+            <div class="full-width">
+                <label>Clinical Notes</label>
+                <textarea name="notes" rows="3" placeholder="Symptoms, observations, medication given, etc."></textarea>
+            </div>
+        </div>
+
+        <button class="btn" type="submit">Save Vitals</button>
+        <div class="message" id="formMessage"></div>
+    </form>
+
+    <div class="footer">
+        © 2025 HealthSync Healthcare Systems
+    </div>
+</div>
+
+<script>
+document.getElementById("vitalsForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // Get JWT token from localStorage or prompt
+    const token = localStorage.getItem("access_token"); 
+    if (!token) {
+        alert("You must login first to submit vitals!");
+        return;
+    }
+
+    const messageEl = document.getElementById("formMessage");
+    messageEl.textContent = "";
+    messageEl.className = "message";
+
+    try {
+        const response = await fetch("http://localhost:5000/vitals/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            messageEl.textContent = result.message;
+            messageEl.classList.add("success");
+            
+            // Redirect to userhome.html after 2 seconds
+            setTimeout(() => {
+                window.location.href = "userhome.html";
+            }, 2000);
+
+        } else {
+            messageEl.textContent = result.error || "Error saving vitals";
+            messageEl.classList.add("error");
+        }
+    } catch (err) {
+        messageEl.textContent = "Network or server error";
+        messageEl.classList.add("error");
+    }
+});
+</script>
+
+</body>
+</html>

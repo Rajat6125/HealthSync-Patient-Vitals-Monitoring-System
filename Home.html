@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthSync | Smart Healthcare Platform</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+        }
+
+        /* Navbar */
+        header {
+            background: white;
+            padding: 18px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a73e8;
+        }
+
+        nav a {
+            margin-left: 30px;
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: #1a73e8;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 80px;
+            background: linear-gradient(to right, #e8f0fe, #f5f7fb);
+        }
+
+        .hero-text {
+            max-width: 550px;
+        }
+
+        .hero-text h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+        }
+
+        .hero-text button {
+            padding: 14px 28px;
+            background-color: #1a73e8;
+            border: none;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .hero-text button:hover {
+            background-color: #1558b0;
+        }
+
+        .hero-image img {
+            width: 420px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0f1e36;
+            color: white;
+            padding: 40px 80px;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-image img {
+                margin-top: 40px;
+                width: 300px;
+            }
+
+            header {
+                padding: 18px 30px;
+            }
+
+            footer {
+                padding: 60px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header>
+        <div class="logo">HealthSync</div>
+        <nav>
+            <a href="Home.html">Home</a>
+            <a href="Login.html">Patients</a>
+            <a href="Login.html">Vitals</a>
+            <a href="Login.html">Analytics</a>
+            <a href="Login.html">Login</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Smart Healthcare, Connected Lives</h1>
+            <p>
+                HealthSync is a unified healthcare platform that seamlessly manages
+                patient data, vitals monitoring, disease tracking, and analytics — all in one place.
+            </p>
+            <button onclick="window.location.href='Login.html'">Get Started</button>
+        </div>
+        <div class="hero-image">
+            <img src="https://cdn-icons-png.flaticon.com/512/4320/4320337.png" alt="Healthcare Illustration">
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2025 HealthSync. All rights reserved.</p>
+        <p>Empowering healthcare through technology.</p>
+    </footer>
+
+</body>
+</html>

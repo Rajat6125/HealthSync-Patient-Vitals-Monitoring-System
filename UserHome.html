@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HealthSync | Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+body { background-color: #f5f7fb; color: #333; }
+header { background: white; padding: 16px 70px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+.logo { font-size: 24px; font-weight: 700; color: #1a73e8; }
+.user-info { font-size: 14px; color: #555; }
+.welcome { padding: 50px 70px; }
+.welcome h1 { font-size: 30px; margin-bottom: 10px; }
+.welcome p { color: #555; font-size: 16px; }
+.cards { padding: 40px 70px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; }
+.card { background: white; border-radius: 14px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); transition: transform 0.2s ease; cursor: pointer; }
+.card:hover { transform: translateY(-6px); }
+.card-icon { font-size: 36px; margin-bottom: 15px; color: #1a73e8; }
+.card h3 { font-size: 18px; margin-bottom: 10px; }
+.card p { font-size: 14px; color: #666; }
+footer { margin-top: 40px; background-color: #0f1e36; color: white; text-align: center; padding: 25px; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">HealthSync</div>
+    <div class="user-info" id="user-info">Loading...</div>
+</header>
+
+<section class="welcome">
+    <h1>Welcome to HealthSync</h1>
+    <p id="patient-details">Loading patient details...</p>
+</section>
+
+<section class="cards">
+    <div class="card" onclick="goToVitals()">
+        <div class="card-icon">❤️</div>
+        <h3>Fill Vitals</h3>
+        <p>Record patient vitals and health measurements.</p>
+    </div>
+    <div class="card" onclick="location.href='patients.html'">
+        <div class="card-icon">🧑‍⚕️</div>
+        <h3>Patients</h3>
+        <p>Manage patient records and disease information.</p>
+    </div>
+    <div class="card" onclick="goToDashboard()">
+        <div class="card-icon">📊</div>
+        <h3>View Dashboard</h3>
+        <p>Analyze vitals, diseases, and trends visually.</p>
+    </div>
+    <div class="card" onclick="location.href='reports.html'">
+        <div class="card-icon">📄</div>
+        <h3>Reports</h3>
+        <p>Generate summaries and downloadable reports.</p>
+    </div>
+    <div class="card" onclick="logout()">
+        <div class="card-icon">🔒</div>
+        <h3>Logout</h3>
+        <p>Securely sign out of the system.</p>
+    </div>
+</section>
+
+<footer>
+    © 2025 HealthSync | Secure Healthcare Platform
+</footer>
+
+<script>
+window.onload = function() {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        document.getElementById("user-info").innerText = `Logged in as ${payload.name}`;
+        document.getElementById("patient-details").innerText = `Patient Name: ${payload.name} | Patient ID: ${payload.patient_id}`;
+    } catch {
+        localStorage.removeItem("access_token");
+        window.location.href = "login.html";
+    }
+};
+
+// Navigate to Vitals page
+function goToVitals() {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+        alert("Please login first!");
+        window.location.href = "login.html";
+        return;
+    }
+    location.href = "Vitals.html";
+}
+
+// Navigate to Dashboard (Dash app)
+function goToDashboard() {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+        alert("Please login first!");
+        window.location.href = "login.html";
+        return;
+    }
+    // Open Dash app in new tab and pass JWT
+    window.open(`http://127.0.0.1:8050/?token=${token}`, "_blank");
+}
+
+// Logout
+function logout() {
+    localStorage.removeItem("access_token");
+    window.location.href = "home.html";
+}
+</script>
+
+</body>
+</html>

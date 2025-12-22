@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HealthSync | Patient Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * { box-sizing: border-box; font-family: "Segoe UI", Tahoma, sans-serif; }
+        body { margin: 0; height: 100vh; background: linear-gradient(135deg, #0f766e, #22c55e); display: flex; align-items: center; justify-content: center; }
+        .login-card { background: #fff; width: 380px; padding: 35px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+        .logo { text-align: center; margin-bottom: 20px; }
+        .logo h1 { margin: 0; color: #0f766e; }
+        .logo p { margin-top: 6px; font-size: 14px; color: #555; }
+        label { display: block; margin-top: 18px; font-size: 14px; color: #333; }
+        input { width: 100%; padding: 12px; margin-top: 6px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; }
+        input:focus { outline: none; border-color: #0f766e; }
+        .login-btn { width: 100%; margin-top: 25px; padding: 12px; background: #0f766e; color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; }
+        .login-btn:hover { background: #115e59; }
+        .extra { margin-top: 18px; text-align: center; font-size: 13px; }
+        .extra a { color: #0f766e; text-decoration: none; }
+        .extra a:hover { text-decoration: underline; }
+        .footer-text { text-align: center; margin-top: 25px; font-size: 12px; color: #777; }
+        .error { color: red; text-align: center; margin-top: 15px; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <div class="logo">
+        <h1>HealthSync</h1>
+        <p>Patient Vitals Monitoring System</p>
+    </div>
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="Enter registered email" required>
+
+    <label>Patient ID</label>
+    <input type="number" id="patient_id" placeholder="Enter patient ID" required>
+
+    <button class="login-btn" onclick="login()">Login</button>
+
+    <div class="error" id="error-msg"></div>
+
+    <div class="extra">
+        <a href="#">Forgot Patient ID?</a> • <a href="register.html">New Patient?</a>
+    </div>
+
+    <div class="footer-text">
+        © 2025 HealthSync Healthcare Systems
+    </div>
+</div>
+
+<script>
+async function login() {
+    const email = document.getElementById("email").value.trim();
+    const patient_id = document.getElementById("patient_id").value.trim();
+    const errorMsg = document.getElementById("error-msg");
+
+    errorMsg.innerText = "";
+
+    if (!email || !patient_id) {
+        errorMsg.innerText = "Email and Patient ID are required";
+        return;
+    }
+
+    try {
+        const response = await fetch("http://localhost:5000/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, patient_id })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            errorMsg.innerText = data.error || "Login failed";
+            return;
+        }
+
+        // Save JWT
+        localStorage.setItem("access_token", data.access_token);
+
+        // Redirect to user home
+        window.location.href = "userhome.html";
+
+    } catch (error) {
+        errorMsg.innerText = "Server not reachable";
+    }
+}
+</script>
+
+</body>
+</html>
