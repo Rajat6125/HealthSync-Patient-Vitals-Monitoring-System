@@ -1,4 +1,4 @@
-# 🏥 HealthSync – Patient Vital Monitoring Dashboard
+# 🏥 HealthSync – Patient Vital Monitoring System
 
 HealthSync is a full-stack healthcare monitoring system that allows patients and healthcare staff to securely record, manage, and visualize daily health vitals such as heart rate, blood pressure, body temperature, oxygen saturation, and respiratory rate.
 
